@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# Chelpis Engineer Interview Assessment
 
-First, run the development server:
+Please fork this repository to your own GitHub and complete the assignment within `7 days`. After completing it, please provide us with the GitHub link.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+> Please send us the link before the deadline.
+> e.g. if you start on 06/01, please send us the link before 06/08 00:00:00.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Task
 
-## Learn More
+Your goal for this task is to create a page where a ghost navigates through a maze to locate a key.
 
-To learn more about Next.js, take a look at the following resources:
+You need to retrieve the maze data by calling the `/api/maze` endpoint and display multiple maze maps on the page. Each map should have a button that toggles between starting and resetting the ghost's travel through the maze. When the user clicks the button, the ghost will either start traversing the maze using [Depth-First Search (DFS)](https://zh.wikipedia.org/zh-tw/%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2), or the traversal will reset, allowing the user to restart from the beginning.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+You can see the demo video at [here](https://drive.google.com/file/d/1DbIrPrw3dqPeQRbtQ5cDeziuAal4sMwJ/view?usp=sharing).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+**Requirements:**
 
-## Deploy on Vercel
+1. You must use the `nextjs` app directory.
+2. For styling, use `tailwindcss`.
+3. For icons, use `lucide-react`.
+4. You may use any additional packages you need.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Note:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. Do not modify `/apps/api/maze`.
+2. Place this page at the route `/maze`.
+3. **Theme:**
+   - The color of the walls is `sky-800`.
+   - The color of the paths is `sky-100`.
+   - The color to **highlight** the current path is `sky-300`.
+   - The color of the ghost is `red-400`.
+   - The color of the key is `red-400`.
+4. **Icons** (using `lucide-react`):
+   - The icon for the ghost is `<Ghost/>`.
+   - The icon for the key is `<Key/>`.
