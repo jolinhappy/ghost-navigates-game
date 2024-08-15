@@ -25,8 +25,8 @@ You can see the demo video at [here](https://drive.google.com/file/d/1DbIrPrw3dq
 
 **Note:**
 
-1. Do not modify `/apps/api/maze`.
-2. Place this page at the route `/maze`.
+1. Do not modify `/app/apis/maze`.
+2. Place this page at the route `/`.
 3. **Theme:**
    - The color of the walls is `sky-800`.
    - The color of the paths is `sky-100`.
