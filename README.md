@@ -12,7 +12,7 @@ Please fork this repository to your own GitHub and complete the assignment withi
 
 Your goal for this task is to create a page where a ghost navigates through a maze to locate a key.
 
-You need to retrieve the maze data by calling the `/api/maze` endpoint and display multiple maze maps on the page. Each map should have a button that toggles between starting and resetting the ghost's travel through the maze. When the user clicks the button, the ghost will either start traversing the maze using [Depth-First Search (DFS)](https://zh.wikipedia.org/zh-tw/%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2), or the traversal will reset, allowing the user to restart from the beginning.
+You need to retrieve the maze data by calling the `/apis/maze` endpoint and display multiple maze maps on the page. Each map should have a button that toggles between starting and resetting the ghost's travel through the maze. When the user clicks the button, the ghost will either start traversing the maze using [Depth-First Search (DFS)](https://zh.wikipedia.org/zh-tw/%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2), or the traversal will reset, allowing the user to restart from the beginning.
 
 You can see the demo video at [here](https://drive.google.com/file/d/1DbIrPrw3dqPeQRbtQ5cDeziuAal4sMwJ/view?usp=sharing).
 
