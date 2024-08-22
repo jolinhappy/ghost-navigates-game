@@ -20,19 +20,12 @@ You can see the demo video at [here](https://drive.google.com/file/d/1DbIrPrw3dq
 
 1. You must use the `nextjs` app directory.
 2. For styling, use `tailwindcss`.
-3. For icons, use `lucide-react`.
-4. You may use any additional packages you need.
-
-**Note:**
-
-1. Do not modify `/app/apis/maze`.
-2. Place this page at the route `/`.
-3. **Theme:**
    - The color of the walls is `sky-800`.
    - The color of the paths is `sky-100`.
    - The color to **highlight** the current path is `sky-300`.
    - The color of the ghost is `red-400`.
    - The color of the key is `red-400`.
-4. **Icons** (using `lucide-react`):
+3. For icons, use `lucide-react`.
    - The icon for the ghost is `<Ghost/>`.
    - The icon for the key is `<Key/>`.
+4. You may use any additional packages you need.
