@@ -16,7 +16,7 @@ app.get('/api/maze', async ctx => {
   }
 })
 
-console.info(`Server  ${chalk.blueBright(`http://localhost:${port}`)}`)
+console.info(`Maze    ${chalk.blueBright(`http://localhost:${port}/api/maze`)}`)
 
 serve({
   fetch: app.fetch,
