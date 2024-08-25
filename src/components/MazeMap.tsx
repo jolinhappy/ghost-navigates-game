@@ -1,7 +1,7 @@
 import { cn } from '@/utils/cn'
 import { Direction, Maze } from '@types'
 import { Ghost, Key } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 interface MazeMapProps {
   mazeData: Maze
@@ -19,6 +19,8 @@ const MazeMap = ({ mazeData }: MazeMapProps) => {
   const [ghostPosition, setGhostPosition] = useState<Direction | null>(null)
   const [endPosition, setEndPosition] = useState<Direction | null>(null)
   const [isStart, setIsStart] = useState<boolean>(false)
+  const [isSearching, setIsSearching] = useState<boolean>(false)
+  const isPaused = useRef<boolean>(false)
   const [ghostPath, setGhostPath] = useState<Direction[]>([])
   const isFindEnd =
     ghostPosition?.x === endPosition?.x && ghostPosition?.y === endPosition?.y
@@ -42,7 +44,10 @@ const MazeMap = ({ mazeData }: MazeMapProps) => {
       starterY: number,
       paths: Direction[]
     ) => {
-      // step 1: Check if the current position is wall or not an available paths"
+      // handle the pause situation of DFS
+      if (isPaused.current) return false
+
+      // step 1: Check if the current position is wall or not an available paths
       const isCheckedPosition = paths.some(
         (path: Direction) => path.x === starterX && path.y === starterY
       )
@@ -79,12 +84,15 @@ const MazeMap = ({ mazeData }: MazeMapProps) => {
         }
       }
 
-      // If return false, remove the current position from paths
-      paths.pop()
-      const lastPosition = paths[paths.length - 1]
-      setGhostPosition({ x: lastPosition.x, y: lastPosition.y })
-      setGhostPath(prev => prev.slice(0, -1))
-      await delay(200)
+      // If return false and not paused state , remove the current position from paths
+      if (!isPaused.current) {
+        paths.pop()
+        const lastPosition = paths[paths.length - 1]
+        setGhostPosition({ x: lastPosition.x, y: lastPosition.y })
+        setGhostPath(prev => prev.slice(0, -1))
+        await delay(200)
+      }
+      return false
     },
     []
   )
@@ -96,16 +104,34 @@ const MazeMap = ({ mazeData }: MazeMapProps) => {
   }, [mazeData])
 
   useEffect(() => {
-    const startToFindDestination = () => {
+    const startToFindDestination = async () => {
       if (!ghostPosition) return
-      const resultPath: any = []
-      depthFirstSearch(mazeData, ghostPosition.x, ghostPosition.y, resultPath)
+      setIsSearching(true)
+      isPaused.current = false
+      const resultPath: Direction[] = []
+      await depthFirstSearch(
+        mazeData,
+        ghostPosition.x,
+        ghostPosition.y,
+        resultPath
+      )
+      setIsSearching(false)
     }
     if (isStart) {
       startToFindDestination()
       setIsStart(false)
     }
   }, [depthFirstSearch, ghostPosition, isStart, mazeData])
+
+  const handleStopSearch = () => {
+    isPaused.current = true
+    setIsSearching(false)
+
+    // reset ghost position and ghost path
+    const startPosition = findTargetPosition(mazeData, 'start')
+    setGhostPosition(startPosition)
+    setGhostPath([])
+  }
 
   return (
     <>
@@ -138,12 +164,12 @@ const MazeMap = ({ mazeData }: MazeMapProps) => {
         </tbody>
       </table>
       <button
-        className=" h-10 p-3 mt-3 bg-slate-200 text-xl flex items-center rounded-lg shadow-lg hover:bg-slate-300"
-        onClick={() => {
-          setIsStart(true)
-        }}
+        className="h-10 w-32 p-3 mt-3 bg-slate-200 text-xl flex items-center justify-center rounded-lg shadow-lg hover:bg-slate-300"
+        onClick={
+          isSearching || isFindEnd ? handleStopSearch : () => setIsStart(true)
+        }
       >
-        Start
+        {isSearching || isFindEnd ? 'Reset' : 'Start'}
       </button>
     </>
   )
