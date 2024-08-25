@@ -1,19 +1,12 @@
 import { cn } from '@/utils/cn'
 import { Direction, Maze } from '@types'
 import { Ghost, Key } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import performDepthFirstSearch from '@/utils/performDepthFirstSearch'
 
 interface MazeMapProps {
   mazeData: Maze
 }
-
-const directions: Direction[] = [
-  // right, left, up, down
-  { x: 1, y: 0 },
-  { x: -1, y: 0 },
-  { x: 0, y: 1 },
-  { x: 0, y: -1 },
-]
 
 const MazeMap = ({ mazeData }: MazeMapProps) => {
   const [ghostPosition, setGhostPosition] = useState<Direction | null>(null)
@@ -25,7 +18,12 @@ const MazeMap = ({ mazeData }: MazeMapProps) => {
   const isFindEnd =
     ghostPosition?.x === endPosition?.x && ghostPosition?.y === endPosition?.y
 
-  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+  const depthFirstSearch = performDepthFirstSearch(
+    setGhostPosition,
+    setGhostPath,
+    isPaused
+  )
+
   const findTargetPosition = (mazeData: Maze, target: 'start' | 'end') => {
     for (let i = 0; i < mazeData.length; i++) {
       for (let j = 0; j < mazeData[i].length; j++) {
@@ -36,66 +34,6 @@ const MazeMap = ({ mazeData }: MazeMapProps) => {
     }
     return { x: 0, y: 0 }
   }
-
-  const depthFirstSearch = useCallback(
-    async (
-      mazeData: Maze,
-      starterX: number,
-      starterY: number,
-      paths: Direction[]
-    ) => {
-      // handle the pause situation of DFS
-      if (isPaused.current) return false
-
-      // step 1: Check if the current position is wall or not an available paths
-      const isCheckedPosition = paths.some(
-        (path: Direction) => path.x === starterX && path.y === starterY
-      )
-      if (
-        starterX === -1 ||
-        starterY === -1 ||
-        starterY >= mazeData.length ||
-        starterX >= mazeData[0].length ||
-        mazeData[starterY][starterX] === 'wall' ||
-        isCheckedPosition
-      ) {
-        return false
-      }
-
-      // step 2: After excluding unavailable position, move the ghost to the current position and save the current position in paths.
-      setGhostPosition({ x: starterX, y: starterY })
-      setGhostPath(prePath => [...prePath, { x: starterX, y: starterY }])
-      paths.push({ x: starterX, y: starterY })
-
-      // step 3: Check if the current position is end
-      if (mazeData[starterY][starterX] === 'end') {
-        return true
-      }
-
-      await delay(200)
-      for (const direction of directions) {
-        const newXPosition = starterX + direction.x
-        const newYPosition = starterY + direction.y
-        // use the new position to find the paths
-        if (
-          await depthFirstSearch(mazeData, newXPosition, newYPosition, paths)
-        ) {
-          return true
-        }
-      }
-
-      // If return false and not paused state , remove the current position from paths
-      if (!isPaused.current) {
-        paths.pop()
-        const lastPosition = paths[paths.length - 1]
-        setGhostPosition({ x: lastPosition.x, y: lastPosition.y })
-        setGhostPath(prev => prev.slice(0, -1))
-        await delay(200)
-      }
-      return false
-    },
-    []
-  )
 
   useEffect(() => {
     // init ghost position and end position from mazeData
