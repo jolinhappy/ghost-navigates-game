@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "concurrently --kill-others --raw npm:dev:*",
     "dev:server": "tsx server/main.ts",
-    "dev:client": "vite"
+    "dev:client": "vite",
+    "test": "vitest"
   },
   "dependencies": {
     "@hono/node-server": "^1.12.1",
@@ -19,6 +20,8 @@
     "tailwind-merge": "^2.5.2"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/react": "^16.0.0",
     "@types/node": "^22.5.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
@@ -28,12 +31,14 @@
     "autoprefixer": "^10.4.20",
     "chalk": "^5.3.0",
     "eslint-plugin-react-hooks": "^4.6.2",
+    "jsdom": "^24.1.2",
     "postcss": "^8.4.41",
     "prettier": "^3.3.3",
     "tailwindcss": "^3.2.0",
     "tsx": "^4.17.0",
     "typescript": "^5.5.3",
     "vite": "^5.4.1",
-    "vite-tsconfig-paths": "^5.0.1"
+    "vite-tsconfig-paths": "^5.0.1",
+    "vitest": "^2.0.5"
   }
 }
