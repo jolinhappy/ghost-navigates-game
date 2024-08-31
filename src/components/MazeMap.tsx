@@ -17,12 +17,7 @@ const MazeMap = ({ mazeData }: MazeMapProps) => {
   const [ghostPath, setGhostPath] = useState<Direction[]>([])
   const isFindEnd =
     ghostPosition?.x === endPosition?.x && ghostPosition?.y === endPosition?.y
-
-  const depthFirstSearch = performDepthFirstSearch(
-    setGhostPosition,
-    setGhostPath,
-    isPaused
-  )
+  const isCanReset = isSearching || isFindEnd
 
   const findTargetPosition = (mazeData: Maze, target: 'start' | 'end') => {
     for (let i = 0; i < mazeData.length; i++) {
@@ -43,6 +38,11 @@ const MazeMap = ({ mazeData }: MazeMapProps) => {
 
   useEffect(() => {
     const startToFindDestination = async () => {
+      const depthFirstSearch = performDepthFirstSearch(
+        setGhostPosition,
+        setGhostPath,
+        isPaused
+      )
       if (!ghostPosition) return
       setIsSearching(true)
       isPaused.current = false
@@ -59,16 +59,20 @@ const MazeMap = ({ mazeData }: MazeMapProps) => {
       startToFindDestination()
       setIsStart(false)
     }
-  }, [depthFirstSearch, ghostPosition, isStart, mazeData])
+  }, [ghostPosition, isStart, mazeData])
 
-  const handleStopSearch = () => {
+  const handleSearch = () => {
     isPaused.current = true
-    setIsSearching(false)
 
-    // reset ghost position and ghost path
-    const startPosition = findTargetPosition(mazeData, 'start')
-    setGhostPosition(startPosition)
-    setGhostPath([])
+    if (isCanReset) {
+      // reset ghost position and ghost path
+      const startPosition = findTargetPosition(mazeData, 'start')
+      setGhostPosition(startPosition)
+      setGhostPath([])
+      setIsSearching(false)
+    } else {
+      setIsStart(true)
+    }
   }
 
   return (
@@ -103,11 +107,9 @@ const MazeMap = ({ mazeData }: MazeMapProps) => {
       </table>
       <button
         className="h-10 w-32 p-3 mt-3 bg-slate-200 text-xl flex items-center justify-center rounded-lg shadow-lg hover:bg-slate-300"
-        onClick={
-          isSearching || isFindEnd ? handleStopSearch : () => setIsStart(true)
-        }
+        onClick={handleSearch}
       >
-        {isSearching || isFindEnd ? 'Reset' : 'Start'}
+        {isCanReset ? 'Reset' : 'Start'}
       </button>
     </>
   )
